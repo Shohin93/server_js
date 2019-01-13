@@ -3,8 +3,18 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const router = require('./router');
+const mongoose = require('mongoose');
+
+// db setup
+mongoose.connect('mongodb://localhost/auth');
 
 const app = express();
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
 router(app);
 
 // app setup
