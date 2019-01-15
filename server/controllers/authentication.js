@@ -1,8 +1,20 @@
+const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jwt-simple');
 const User = require('../models/user');
+const config = require('../config');
+
+function userToken(user) {
+  const timestamp = new Date().getTime();
+  return jwt.encode({sub: user.id, iat: timestamp}, config.secret);
+}
 
 exports.signup = function(req, res, next) {
   const email = req.body.email
   const password = req.body.password;
+
+  if (!email || !password) {
+    return res.status(422).send("You must provide email or password!");
+  }
 
   User.findOne({email: email}, function(err, existingUser) {
     if (err) {
@@ -21,7 +33,8 @@ exports.signup = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      res.json({success: true});
+      // respond to req that user has been created
+      res.json({token: userToken(user)});
     })
   });
 }
