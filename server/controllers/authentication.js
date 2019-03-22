@@ -4,6 +4,7 @@ const User = require('../models/user');
 const config = require('../config');
 
 function userToken(user) {
+  console.log(user)
   const timestamp = new Date().getTime();
   return jwt.encode({sub: user.id, iat: timestamp}, config.secret);
 }
@@ -37,4 +38,9 @@ exports.signup = function(req, res, next) {
       res.json({token: userToken(user)});
     })
   });
+}
+
+exports.signin = function(req, res, next) {
+  // Just give a user token
+  res.send({token: userToken(req.user)});
 }

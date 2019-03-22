@@ -1,14 +1,18 @@
 const express = require('express');
 const http = require('http');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const passport = require('passport');
 const morgan = require('morgan');
 const router = require('./router');
-const mongoose = require('mongoose');
-
 // db setup
 mongoose.connect('mongodb://localhost/auth');
 
 const app = express();
+
+app.use(passport.initialize());
+// app.use(passport.session());
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
